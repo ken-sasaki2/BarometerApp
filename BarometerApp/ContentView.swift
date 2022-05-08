@@ -39,27 +39,23 @@ final class AltimatorDataStore {
         altimeter = CMAltimeter()
     }
     
-    func doResert() {
-        stopUpdate()
-        startUpdate()
-    }
-    
     func startUpdate() {
         guard let altimeter = altimeter else {
             return
         }
         
-        // CMAltimeterを許可しないといけない
-        
-        
         if CMAltimeter.isRelativeAltitudeAvailable() {
             altimeter.startRelativeAltitudeUpdates(to: OperationQueue.main) { data, error in
                 if error == nil {
-                    let pressure = data?.pressure.doubleValue
                     let altitude = data?.relativeAltitude.doubleValue
+                    guard let pressure = data?.pressure.doubleValue else {
+                        return
+                    }
                     
-                    print("気圧", pressure as Any)
+                    print("気圧", pressure * 10)
                     print("高度", altitude as Any)
+                    
+                    self.stopUpdate()
                 } else {
                     // エラー処理
                 }
