@@ -9,11 +9,11 @@ import SwiftUI
 import CoreMotion
 
 struct ContentView: View {
-    private let altimatorDataStore = AltimatorDataStore()
+    private let altimator = Altimator()
     
     var body: some View {
         Button {
-            altimatorDataStore.startUpdate()
+            altimator.startUpdate()
         } label: {
             Text("気圧計起動")
                 .frame(width: 300, height: 44)
@@ -32,7 +32,7 @@ struct ContentView_Previews: PreviewProvider {
 }
 
 
-final class AltimatorDataStore {
+final class Altimator {
     var altimeter: CMAltimeter?
     
     init() {
@@ -55,9 +55,11 @@ final class AltimatorDataStore {
                     print("気圧", pressure * 10)
                     print("高度", altitude as Any)
                     
+                    // Save to database...
+                    
                     self.stopUpdate()
                 } else {
-                    // エラー処理
+                    // Error hundring...
                 }
             }
         }
